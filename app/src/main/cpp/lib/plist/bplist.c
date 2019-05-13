@@ -29,11 +29,12 @@
 #include <string.h>
 #include <assert.h>
 
+#include "plist.h"
+
 #include <ctype.h>
 #include <inttypes.h>
 
 #include "plist/plist.h"
-#include "plist.h"
 #include "hashtable.h"
 #include "bytearray.h"
 #include "ptrarray.h"
@@ -47,7 +48,13 @@
 #define BPLIST_VERSION          ((uint8_t*)"00")
 #define BPLIST_VERSION_SIZE     2
 
+#if defined(_MSC_VER)
+#   pragma pack(push) 
+#   pragma pack(1)
+typedef struct {
+#else
 typedef struct __attribute__((packed)) {
+#endif
     uint8_t unused[6];
     uint8_t offset_size;
     uint8_t ref_size;
@@ -55,6 +62,10 @@ typedef struct __attribute__((packed)) {
     uint64_t root_object_index;
     uint64_t offset_table_offset;
 } bplist_trailer_t;
+
+#if defined(_MSC_VER)
+#   pragma pack(pop) 
+#endif
 
 enum
 {
@@ -85,13 +96,48 @@ union plist_uint_ptr
     uint64_t *u64ptr;
 };
 
+#ifdef _MSC_VER
+uint64_t get_unaligned_64(uint64_t *ptr)
+{
+#pragma pack(push, 1)
+    typedef struct {
+        uint64_t __v;
+	} packed;
+	packed *__p = (packed *)(ptr);
+#pragma pack(pop)
+    return __p->__v;
+}
+
+uint32_t get_unaligned_32(uint32_t *ptr)
+{
+#pragma pack(push, 1)
+    typedef struct {
+        uint32_t __v;
+	} packed;
+	packed *__p = (packed *)(ptr);
+#pragma pack(pop)
+    return __p->__v;
+}
+
+uint16_t get_unaligned_16(uint16_t *ptr)
+{
+#pragma pack(push, 1)
+	typedef struct {
+        uint16_t __v;
+	} packed;
+	packed *__p = (packed *)(ptr);
+#pragma pack(pop)
+    return __p->__v;
+}
+#else
 #define get_unaligned(ptr)			  \
-  ({                                              \
-    struct __attribute__((packed)) {		  \
+  ({                                  \
+    struct __attribute__((packed)) {  \
       typeof(*(ptr)) __v;			  \
-    } *__p = (void *) (ptr);			  \
-    __p->__v;					  \
+    } *__p = (void *) (ptr);		  \
+    __p->__v;					      \
   })
+#endif
 
 
 #ifndef bswap16
@@ -146,6 +192,19 @@ union plist_uint_ptr
 #define beNtoh(x,n) be64toh(x << ((8-n) << 3))
 #endif
 
+#if defined(_MSC_VER)
+uint64_t UINT_TO_HOST(const void *x, uint8_t n)
+{
+    union plist_uint_ptr __up;
+    __up.src = x;
+    return (n >= 8 ? be64toh( get_unaligned_64(__up.u64ptr) ) : \
+           (n == 4 ? be32toh( get_unaligned_32(__up.u32ptr) ) : \
+           (n == 2 ? be16toh( get_unaligned_16(__up.u16ptr) ) : \
+           (n == 1 ? *__up.u8ptr : \
+           beNtoh( get_unaligned_64(__up.u64ptr), n) \
+           ))));
+}
+#else
 #define UINT_TO_HOST(x, n) \
 	({ \
 		union plist_uint_ptr __up; \
@@ -157,6 +216,7 @@ union plist_uint_ptr
 		beNtoh( get_unaligned(__up.u64ptr), n) \
 		)))); \
 	})
+#endif
 
 #define get_needed_bytes(x) \
 		( ((uint64_t)x) < (1ULL << 8) ? 1 : \
@@ -268,11 +328,11 @@ static plist_t parse_real_node(const char **bnode, uint8_t size)
     switch (size)
     {
     case sizeof(uint32_t):
-        *(uint32_t*)buf = float_bswap32(get_unaligned((uint32_t*)*bnode));
+        *(uint32_t*)buf = float_bswap32(get_unaligned_32((uint32_t*)*bnode));
         data->realval = *(float *) buf;
         break;
     case sizeof(uint64_t):
-        *(uint64_t*)buf = float_bswap64(get_unaligned((uint64_t*)*bnode));
+        *(uint64_t*)buf = float_bswap64(get_unaligned_64((uint64_t*)*bnode));
         data->realval = *(double *) buf;
         break;
     default:
@@ -332,7 +392,7 @@ static char *plist_utf16be_to_utf8(uint16_t *unistr, long len, long *items_read,
 	}
 
 	while (i < len) {
-		wc = be16toh(get_unaligned(unistr + i));
+		wc = be16toh(get_unaligned_16(unistr + i));
 		i++;
 		if (wc >= 0xD800 && wc <= 0xDBFF) {
 			if (!read_lead_surrogate) {
@@ -394,7 +454,7 @@ static plist_t parse_unicode_node(const char **bnode, uint64_t size)
     tmpstr[items_written] = '\0';
 
     data->type = PLIST_STRING;
-    data->strval = realloc(tmpstr, items_written+1);
+    data->strval = (char*)realloc(tmpstr, items_written+1);
     if (!data->strval)
         data->strval = tmpstr;
     data->length = items_written;
@@ -490,8 +550,8 @@ static plist_t parse_dict_node(struct bplist_data *bplist, const char** bnode, u
             return NULL;
         }
 
-        node_attach(node, key);
-        node_attach(node, val);
+        node_attach((node_t *)node, (node_t *)key);
+        node_attach((node_t *)node, (node_t *)val);
     }
 
     return node;
@@ -535,7 +595,7 @@ static plist_t parse_array_node(struct bplist_data *bplist, const char** bnode, 
             return NULL;
         }
 
-        node_attach(node, val);
+        node_attach((node_t *)node, (node_t *)val);
     }
 
     return node;
@@ -1188,7 +1248,7 @@ PLIST_API void plist_to_bin(plist_t plist, char **plist_bin, uint32_t * length)
     //serialize plist
     ser_s.objects = objects;
     ser_s.ref_table = ref_table;
-    serialize_plist(plist, &ser_s);
+    serialize_plist((node_t *)plist, &ser_s);
 
     //now stream to output buffer
     offset_size = 0;			//unknown yet
@@ -1202,7 +1262,7 @@ PLIST_API void plist_to_bin(plist_t plist, char **plist_bin, uint32_t * length)
     size_t req = 0;
     for (i = 0; i < num_objects; i++)
     {
-        node_t* node = ptr_array_index(objects, i);
+        node_t* node = (node_t *)ptr_array_index(objects, i);
         plist_data_t data = plist_get_data(node);
         uint64_t size;
         uint8_t bsize;
@@ -1332,10 +1392,10 @@ PLIST_API void plist_to_bin(plist_t plist, char **plist_bin, uint32_t * length)
             write_data(bplist_buff, data->buff, data->length);
             break;
         case PLIST_ARRAY:
-            write_array(bplist_buff, ptr_array_index(objects, i), ref_table, ref_size);
+            write_array(bplist_buff, (node_t *)ptr_array_index(objects, i), ref_table, ref_size);
             break;
         case PLIST_DICT:
-            write_dict(bplist_buff, ptr_array_index(objects, i), ref_table, ref_size);
+            write_dict(bplist_buff, (node_t *)ptr_array_index(objects, i), ref_table, ref_size);
             break;
         case PLIST_DATE:
             write_date(bplist_buff, data->realval);
@@ -1373,7 +1433,7 @@ PLIST_API void plist_to_bin(plist_t plist, char **plist_bin, uint32_t * length)
     byte_array_append(bplist_buff, &trailer, sizeof(bplist_trailer_t));
 
     //set output buffer and size
-    *plist_bin = bplist_buff->data;
+    *plist_bin = (char*)bplist_buff->data;
     *length = bplist_buff->len;
 
     bplist_buff->data = NULL; // make sure we don't free the output buffer

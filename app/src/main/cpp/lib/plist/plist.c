@@ -35,6 +35,7 @@
 #include <pthread.h>
 #endif
 
+#include "plist.h"
 #include "node.h"
 #include "hashtable.h"
 

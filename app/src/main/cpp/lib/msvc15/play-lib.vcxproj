@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{402267FE-79C6-37D6-83B9-DCFD59B4E942}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>play-lib</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="project_config_msvc15.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="project_config_msvc15.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">play-lib</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.dll</TargetExt>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">play-lib</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\crypto;$(SolutionDir)\curve25519;$(SolutionDir)\ed25519;$(SolutionDir)\playfair;$(SolutionDir)\plist\plist;$(SolutionDir)\fdk-aac\libAACdec\include;$(SolutionDir)\fdk-aac\libAACenc\include;$(SolutionDir)\fdk-aac\libFDK\include;$(SolutionDir)\fdk-aac\libMpegTPDec\include;$(SolutionDir)\fdk-aac\libMpegTPEnc\include;$(SolutionDir)\fdk-aac\libPCMutils\include;$(SolutionDir)\fdk-aac\libSBRdec\include;$(SolutionDir)\fdk-aac\libSBRenc\include;$(SolutionDir)\fdk-aac\libSYS\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;play_lib_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\";play_lib_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\crypto;$(SolutionDir)\curve25519;$(SolutionDir)\ed25519;$(SolutionDir)\playfair;$(SolutionDir)\plist\plist;$(SolutionDir)\fdk-aac\libAACdec\include;$(SolutionDir)\fdk-aac\libAACenc\include;$(SolutionDir)\fdk-aac\libFDK\include;$(SolutionDir)\fdk-aac\libMpegTPDec\include;$(SolutionDir)\fdk-aac\libMpegTPEnc\include;$(SolutionDir)\fdk-aac\libPCMutils\include;$(SolutionDir)\fdk-aac\libSBRdec\include;$(SolutionDir)\fdk-aac\libSBRenc\include;$(SolutionDir)\fdk-aac\libSYS\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)\crypto;$(SolutionDir)\curve25519;$(SolutionDir)\ed25519;$(SolutionDir)\playfair;$(SolutionDir)\plist\plist;$(SolutionDir)\fdk-aac\libAACdec\include;$(SolutionDir)\fdk-aac\libAACenc\include;$(SolutionDir)\fdk-aac\libFDK\include;$(SolutionDir)\fdk-aac\libMpegTPDec\include;$(SolutionDir)\fdk-aac\libMpegTPEnc\include;$(SolutionDir)\fdk-aac\libPCMutils\include;$(SolutionDir)\fdk-aac\libSBRdec\include;$(SolutionDir)\fdk-aac\libSBRenc\include;$(SolutionDir)\fdk-aac\libSYS\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>crypto.lib;curve25519.lib;ed25519.lib;playfair.lib;plist.lib;fdk-aac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(SolutionDir)/bin/lib/play-lib.lib</ImportLibrary>
+      <ProgramDataBaseFile>$(SolutionDir)/bin/play-lib.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)\crypto;$(SolutionDir)\curve25519;$(SolutionDir)\ed25519;$(SolutionDir)\playfair;$(SolutionDir)\plist\plist;$(SolutionDir)\fdk-aac\libAACdec\include;$(SolutionDir)\fdk-aac\libAACenc\include;$(SolutionDir)\fdk-aac\libFDK\include;$(SolutionDir)\fdk-aac\libMpegTPDec\include;$(SolutionDir)\fdk-aac\libMpegTPEnc\include;$(SolutionDir)\fdk-aac\libPCMutils\include;$(SolutionDir)\fdk-aac\libSBRdec\include;$(SolutionDir)\fdk-aac\libSBRenc\include;$(SolutionDir)\fdk-aac\libSYS\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;play_lib_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";play_lib_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\crypto;$(SolutionDir)\curve25519;$(SolutionDir)\ed25519;$(SolutionDir)\playfair;$(SolutionDir)\plist\plist;$(SolutionDir)\fdk-aac\libAACdec\include;$(SolutionDir)\fdk-aac\libAACenc\include;$(SolutionDir)\fdk-aac\libFDK\include;$(SolutionDir)\fdk-aac\libMpegTPDec\include;$(SolutionDir)\fdk-aac\libMpegTPEnc\include;$(SolutionDir)\fdk-aac\libPCMutils\include;$(SolutionDir)\fdk-aac\libSBRdec\include;$(SolutionDir)\fdk-aac\libSBRenc\include;$(SolutionDir)\fdk-aac\libSYS\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>$(SolutionDir)\crypto;$(SolutionDir)\curve25519;$(SolutionDir)\ed25519;$(SolutionDir)\playfair;$(SolutionDir)\plist\plist;$(SolutionDir)\fdk-aac\libAACdec\include;$(SolutionDir)\fdk-aac\libAACenc\include;$(SolutionDir)\fdk-aac\libFDK\include;$(SolutionDir)\fdk-aac\libMpegTPDec\include;$(SolutionDir)\fdk-aac\libMpegTPEnc\include;$(SolutionDir)\fdk-aac\libPCMutils\include;$(SolutionDir)\fdk-aac\libSBRdec\include;$(SolutionDir)\fdk-aac\libSBRenc\include;$(SolutionDir)\fdk-aac\libSYS\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalDependencies>crypto.lib;curve25519.lib;ed25519.lib;playfair.lib;plist.lib;fdk-aac.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>$(SolutionDir)/bin/lib/play-lib.lib</ImportLibrary>
+      <ProgramDataBaseFile>$(SolutionDir)/bin/play-lib.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\aes.c" />
+    <ClCompile Include="..\aes_ctr.c" />
+    <ClCompile Include="..\byteutils.c" />
+    <ClCompile Include="..\fairplay_playfair.c" />
+    <ClCompile Include="..\http_parser.c" />
+    <ClCompile Include="..\http_request.c" />
+    <ClCompile Include="..\http_response.c" />
+    <ClCompile Include="..\httpd.c" />
+    <ClCompile Include="..\logger.c" />
+    <ClCompile Include="..\mirror_buffer.c" />
+    <ClCompile Include="..\netutils.c" />
+    <ClCompile Include="..\pairing.c" />
+    <ClCompile Include="..\plist.c" />
+    <ClCompile Include="..\raop.c" />
+    <ClCompile Include="..\raop_buffer.c" />
+    <ClCompile Include="..\raop_rtp.c" />
+    <ClCompile Include="..\raop_rtp_mirror.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -364,7 +364,7 @@ bplist_parse_object(const int64_t *reftab, uint64_t reftablen, uint64_t reftabid
 		dataidx += ret;
 	}
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
@@ -400,7 +400,7 @@ bplist_parse_object(const int64_t *reftab, uint64_t reftablen, uint64_t reftabid
 			free(object);
 			return NULL;
 		}
-		buffer = malloc(length);
+        buffer = (uint8_t *)malloc(length);
 		if (!buffer) {
 			free(object);
 			return NULL;
@@ -416,7 +416,7 @@ bplist_parse_object(const int64_t *reftab, uint64_t reftablen, uint64_t reftabid
 			free(object);
 			return NULL;
 		}
-		buffer = calloc(length + 1, sizeof(char));
+        buffer = (char *)calloc(length + 1, sizeof(char));
 		if (!buffer) {
 			free(object);
 			return NULL;
@@ -431,7 +431,7 @@ bplist_parse_object(const int64_t *reftab, uint64_t reftablen, uint64_t reftabid
 			free(object);
 			return NULL;
 		}
-		values = calloc(length, sizeof(plist_object_t *));
+        values = (plist_object_t **)calloc(length, sizeof(plist_object_t *));
 		if (!values) {
 			free(object);
 			return NULL;
@@ -471,12 +471,12 @@ bplist_parse_object(const int64_t *reftab, uint64_t reftablen, uint64_t reftabid
 			free(object);
 			return NULL;
 		}
-		keys = calloc(length, sizeof(char *));
+        keys = (char **)calloc(length, sizeof(char *));
 		if (!keys) {
 			free(object);
 			return NULL;
 		}
-		values = calloc(length, sizeof(plist_object_t *));
+        values = (plist_object_t **)calloc(length, sizeof(plist_object_t *));
 		if (!values) {
 			free(keys);
 			free(object);
@@ -549,7 +549,7 @@ plist_object_true()
 {
 	plist_object_t *object;
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
@@ -565,7 +565,7 @@ plist_object_false()
 {
 	plist_object_t *object;
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
@@ -581,7 +581,7 @@ plist_object_integer(uint64_t value)
 {
 	plist_object_t *object;
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
@@ -597,7 +597,7 @@ plist_object_real(double value)
 {
 	plist_object_t *object;
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
@@ -614,11 +614,11 @@ plist_object_data(const uint8_t *value, uint32_t valuelen)
 	plist_object_t *object;
 	uint8_t *buffer;
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
-	buffer = malloc(valuelen);
+    buffer = (uint8_t *)malloc(valuelen);
 	if (!buffer) {
 		free(object);
 		return NULL;
@@ -639,12 +639,12 @@ plist_object_string(const char *value)
 	uint64_t valuelen;
 	char *buffer;
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
 	valuelen = strlen(value);
-	buffer = malloc(valuelen + 1);
+    buffer = (char *)malloc(valuelen + 1);
 	if (!buffer) {
 		free(object);
 		return NULL;
@@ -665,11 +665,11 @@ plist_object_array(uint32_t size, ...)
 	va_list ap;
 	uint64_t i;
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
-	values = calloc(size, sizeof(plist_object_t *));
+    values = (plist_object_t **)calloc(size, sizeof(plist_object_t *));
 	if (!values) {
 		free(object);
 		return NULL;
@@ -697,16 +697,16 @@ plist_object_dict(uint32_t size, ...)
 	va_list ap;
 	uint64_t i;
 
-	object = calloc(1, sizeof(plist_object_t));
+    object = (plist_object_t *)calloc(1, sizeof(plist_object_t));
 	if (!object) {
 		return NULL;
 	}
-	keys = calloc(size, sizeof(char *));
+    keys = (char **)calloc(size, sizeof(char *));
 	if (!keys) {
 		free(object);
 		return NULL;
 	}
-	values = calloc(size, sizeof(plist_object_t *));
+    values = (plist_object_t **)calloc(size, sizeof(plist_object_t *));
 	if (!values) {
 		free(keys);
 		free(object);
@@ -718,7 +718,7 @@ plist_object_dict(uint32_t size, ...)
 		const char *key = va_arg(ap, const char *);
 		int keylen = strlen(key);
 
-		keys[i] = calloc(keylen+1, sizeof(char));
+		keys[i] = (char*)calloc(keylen+1, sizeof(char));
 		if (keys[i]) {
 			memcpy(keys[i], key, keylen);
 		}
@@ -876,7 +876,7 @@ plist_object_from_bplist(const uint8_t *data, uint32_t datalen)
 		return NULL;
 	}
 
-	reftab = calloc(objects, sizeof(int64_t));
+	reftab = (int64_t*)calloc(objects, sizeof(int64_t));
 	if (!reftab) {
 		return NULL;
 	}
@@ -916,13 +916,13 @@ plist_object_to_bplist(plist_object_t *object, uint8_t **data, uint32_t *datalen
 	buflen += objects * offlen;
 	buflen += BPLIST_TRAILER_LEN;
 
-	buf = calloc(buflen, sizeof(uint8_t));
+	buf = (uint8_t *)calloc(buflen, sizeof(uint8_t));
 	if (!buf) {
 		return -2;
 	}
 	bufidx = 0;
 
-	reftab = calloc(objects, sizeof(uint64_t));
+	reftab = (int64_t *)calloc(objects, sizeof(uint64_t));
 	if (!reftab) {
 		free(buf);
 		return -3;
